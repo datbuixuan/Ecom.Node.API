@@ -155,7 +155,7 @@ app.post('/tranfer-nft', async (req, res) => {
     });
 });
 
-app.post('/mint-2', async () => {
+app.post('/mint-2', async (req, res) => {
     // In Node.js
     let web3 = new Web3(
         'wss://speedy-nodes-nyc.moralis.io/dafe9c6c96b39b4f2ec839eb/bsc/testnet/ws'
@@ -414,7 +414,13 @@ app.post('/mint-2', async () => {
         '0xbf0aab28c6d4373f12526e7b32cddfcd288b0c9bc97ea0433e0e2ffc4eae2801'
     );
     console.log(signedTx);
-    return signedTx;
+    web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+
+    res.send({
+        success: true,
+        transactionHash: signedTx.transactionHash,
+        signedTx
+    });
 });
 
 const server = app.listen(port, (error) => {
